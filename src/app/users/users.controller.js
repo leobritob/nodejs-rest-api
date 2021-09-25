@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { usersService } = require('./users.service');
 const { postsService } = require('../posts/posts.service');
 const { authenticateToken } = require('../../helpers/auth');
+const { createUserValidator, updateUserValidator } = require('./users.dto');
 
 const UsersRouter = Router();
 
@@ -11,7 +12,7 @@ UsersRouter.get('/v1/users', authenticateToken, async (req, res) => {
   return res.status(200).json({ users });
 });
 
-UsersRouter.post('/v1/users', async (req, res) => {
+UsersRouter.post('/v1/users', createUserValidator, async (req, res) => {
   const { body } = req;
 
   const user = await usersService.create(body);
@@ -35,7 +36,7 @@ UsersRouter.get('/v1/users/:id/posts', async (req, res) => {
   return res.status(200).json(posts);
 });
 
-UsersRouter.put('/v1/users/:id', async (req, res) => {
+UsersRouter.put('/v1/users/:id', updateUserValidator, async (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
